@@ -5,48 +5,50 @@ const words = ['cat', 'dog', 'bear', 'giraffe', 'duck'];
 
 let randomIndex = 0;
 /*создали переменную, которая будет хранить индекс рандомно выбранного слова из массива*/
+let index = 0;
+/* переменна index - это порядковый номер буквы в слове */
+let currentWord;
+/*создали переменную, которая будет хранить индекс рандомно выбранного слова из массива */
 
 
 function getRandomWord(words) {
     randomIndex = Math.floor(Math.random() * words.length);
-    return words[randomIndex];
+    currentWord = words[randomIndex];
+    containerWord.innerHTML = '';
+    /*очистить контейнер */
+    for (let i = 0; i < currentWord.length; i++) {
+        /* c помощью for мы перебираем наше рандомное слово по буквам*/
+        const letter = document.createElement('span');
+        /*мы создали спан, чтобы поместить нашу букву*/
+        letter.textContent = currentWord[i];
+
+        containerWord.append(letter);
+    }
+
 }
-/*создали функцию, которая возвращает рандомно выбранное слово из нашего массива*/
-const randomWord = getRandomWord(words);
-/*создали переменную, которая возвращает результат нашей функции: рандомное слово*/
-
-for (let i = 0; i < randomWord.length; i++) {
-    /* c помощью for мы перебираем наше рандомное слово по буквам*/
-    const letter = document.createElement('span');
-    /*мы создали спан, чтобы поместить нашу букву*/
-    letter.textContent = randomWord[i];
-    containerWord.append(letter);
-}
-
-
-
 
 document.addEventListener('keydown', function(event) {
     const spansApple = containerWord.querySelectorAll('span');
     const userEntered = event.key.toLowerCase();
     /*создали переменную, котoрая хранит информацию о введеном польз букве*/
-    const rightLetter = randomWord[randomIndex].toLowerCase();
+    const rightLetter = currentWord[index].toLowerCase();
     /*буква из нашего рандомного слова */
     if (userEntered != rightLetter) {
         /*если пользователь ввел неверно*/
-        spansApple[randomIndex].classList.add('w');
+        spansApple[index].classList.add('w');
         /*тогда буква окрашивается в красный*/
     } else if (userEntered === rightLetter) {
         /*если пользователь ввел верно букву */
-        spansApple[randomIndex].classList.remove('w');
-        spansApple[randomIndex].classList.add('c');
+        spansApple[index].classList.remove('w');
+        spansApple[index].classList.add('c');
         /*тогда - в зеленый */
-        randomIndex++;
+        index++;
         /*и так если верно шаг за шагом введенные правильно буквы окрашиваются в зеленый */
     }
-    if (randomIndex === randomWord.length - 1) {
+    if (index === currentWord.length) {
         /*если все буквы из нашего слова внесены*/
-        setTimeout(randomWord, 1000)
+        index = 0;
+        setTimeout(getRandomWord(words), 1000)
             /*выводим новое рандомное слово из нашего массива через 1 сек*/
     };
 });
